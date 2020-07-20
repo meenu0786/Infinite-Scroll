@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="row transitions-details">
+    <h6 class="text-muted pl-3 py-2"> <i class="fa fa-clock-o" aria-hidden="true"></i>Transactions
+    </h6>
+    <div class="col-12">
+      <table class="table">
+        <cdk-virtual-scroll-viewport (scroll)="onScroll($event)" tvsItemSize #infiniteScrolling
+          itemSize="10" class="virtual-scroll">
+          <thead>
+            <tr>
+              <td>Type</td>
+              <td>Amount XTZ (USD)</td>
+              <td>Date</td>
+              <td>Address</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *cdkVirtualFor="let data of getTransData.data; let i = index; trackBy: getIds ">
+              <ng-container *ngIf="data.length > 0">
+                <td class="border-top-0 py-4">
+                  <span class="rounded-pill px-2 py-1"
+                    [class]="data[2] === 'transaction'?'status-recieved text-success': ''"
+                    *ngIf="data[2] === 'transaction'">
+                    {{ data[2] }}
+                  </span>
+                  <span class="rounded-pill px-2 py-1" *ngIf="data[2] === 'unfreeze'"
+                    [class]="data[2] === 'unfreeze'?'status-sent bg-light': ''">
+                    {{ data[2] }}
+                  </span>
+                  <span *ngIf="data[2] === 'bake'" class="rounded-pill px-2 py-1"
+                    [class]="data[2] === 'bake'?'status-reward text-secondary': ''">
+                    {{ data[2] }}
+                  </span>
+                </td>
+                <td class="border-top-0 amount py-4"
+                  [class]="data[2] !== 'transaction'?'text-muted': ''">+
+                  {{ data[4] | currency:'XTZ' | slice:3 }} XTZ
+                  {{ data[4] | currency:'USD' | slice:1:-1 }} USD</td>
+                <td class="border-top-0 py-4">{{ data[1] | date :'MMM d y, hh:mm'}}</td>
+                <td class="border-top-0 py-4">{{ data[3] | ellipse}}</td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </cdk-virtual-scroll-viewport>
+        <div *ngIf="loading">
+          loading ...
+        </div>
+      </table>
+    </div>
+  </div>
+</div>
